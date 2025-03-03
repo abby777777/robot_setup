@@ -1,0 +1,34 @@
+# ryzer config schema
+# gpu_support: false         # true by default
+# x11_display: false         # true by default
+
+build_arguments:
+
+- "PYTHON_VERSION=3.10"   # Cannot exceed Python 3.11 due to Aloha Gym / Mujoco 2.3.7 dependency
+
+                          # https://pypi.org/project/mujoco/2.3.7/#files
+
+environment_variables:
+
+- "HSA_OVERRIDE_GFX_VERSION=11.0.0"  # Required for HIP to write kernels
+# environment_variables:
+
+# - "VARIABLE=VALUE"  # List of environment variables to set in the docker
+
+                      # E.g. "JUPYTER_CONFIG_DIR=/root/.jupyter"
+
+ 
+
+# port_mappings: 
+
+# - "host_portnum:container_portnum"  # List of port mappings to expose from the docker
+
+                                      # E.g. "8888:8888" for JupyterLab
+
+ 
+
+# volumes:
+
+# - "host_path:container_path"  # List of volume mappings to mount from the host
+
+                                # E.g. "/path/to/host:/path/to/container"
