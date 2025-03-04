@@ -8,6 +8,7 @@ SUBSYSTEM=="tty", ATTRS{idVendor}=="2f5d", ATTRS{idProduct}=="2202", ATTRS{seria
 sudo cp ./99-usb-serial.rules /etc/udev/rules.d/
 sudo reboot
 
+
 chmod +x clone_lerobot.sh
 chmod +x overlay.sh
 
@@ -16,6 +17,7 @@ chmod +x overlay.sh
 
 docker pull rocm/pytorch:rocm6.3.3_ubuntu22.04_py3.10_pytorch_release_2.4.0
 
+xhost +local
 #build
 docker build -t ryzerdocker .
 
@@ -39,10 +41,14 @@ sudo docker run -it --rm --shm-size=16G \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   ryzerdocker
 
+#to check for video numbers
+ffplay /dev/video0 for example to see the /dev/video0 will stream
+#values from video0 and video1 need to be edited in the lerobot/lerobot/common/robot_devices/robots/config.py in the two places that you find the word logitech
+#once changed -- they need to be pushed to github, so that the dockerfile clone pulls (without cache) the new config file
 
-ffplay /dev/video0
+#to try callibration
 python lerobot/scripts/control_robot.py --robot.type=koch --control.type calibrate
 
 
 
- -v $(pwd)/data/lerobot/:/opt/lerobot/ \
+# not needed; but if you wanted to mount files on -v $(pwd)/data/lerobot/:/opt/lerobot/ \
