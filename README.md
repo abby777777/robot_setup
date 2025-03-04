@@ -1,12 +1,20 @@
-#First only connect the leader arm to Jetson and record the serial ID by running the following:
+# LeRobot Setup and Docker Run Instructions
+
+Follow these steps to set up your system, clone and overlay LeRobot, and run the Docker container.
+
+## 1. Set Up Udev Rules for USB Serial Devices
+
+First, only connect the leader arm to the Jetson and record the serial ID by running:
+
 ll /dev/serial/by-id/
 
-Then edit the first line of ./99-usb-serial.rules like the following.
-SUBSYSTEM=="tty", ATTRS{idVendor}=="2f5d", ATTRS{idProduct}=="2202", ATTRS{serial}=="BA98C8C350304A46462E3120FF121B06", SYMLINK+="ttyACM_kochleader"
-SUBSYSTEM=="tty", ATTRS{idVendor}=="2f5d", ATTRS{idProduct}=="2202", ATTRS{serial}=="00000000000000000000000000000000", SYMLINK+="ttyACM_kochfollower"
 
-sudo cp ./99-usb-serial.rules /etc/udev/rules.d/
-sudo reboot
+Then, edit the first line of `./99-usb-serial.rules` as follows:
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2f5d", ATTRS{idProduct}=="2202", ATTRS{serial}=="BA98C8C350304A46462E3120FF121B06", SYMLINK+="ttyACM_kochleader" SUBSYSTEM=="tty", ATTRS{idVendor}=="2f5d", ATTRS{idProduct}=="2202", ATTRS{serial}=="00000000000000000000000000000000", SYMLINK+="ttyACM_kochfollower"
+
+Copy the udev rules file and reboot:
+sudo cp ./99-usb-serial.rules /etc/udev/rules.d/ sudo reboot
 
 
 chmod +x clone_lerobot.sh
@@ -15,9 +23,12 @@ chmod +x overlay.sh
 ./clone_lerobot.sh
 ./overlay.sh
 
+#Pull the docker file base
 docker pull rocm/pytorch:rocm6.3.3_ubuntu22.04_py3.10_pytorch_release_2.4.0
 
+#Allow local connections to the X server:
 xhost +local
+
 #build
 docker build -t ryzerdocker .
 
@@ -41,14 +52,24 @@ sudo docker run -it --rm --shm-size=16G \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   ryzerdocker
 
-#to check for video numbers
-ffplay /dev/video0 for example to see the /dev/video0 will stream
-#values from video0 and video1 need to be edited in the lerobot/lerobot/common/robot_devices/robots/config.py in the two places that you find the word logitech
-#once changed -- they need to be pushed to github, so that the dockerfile clone pulls (without cache) the new config file
+## 6. Testing and Calibration
 
-#to try callibration
+### Check Video Device Streaming
+
+To check video streaming, run:
+
+### Update Video Device Configuration
+
+Edit the file `lerobot/lerobot/common/robot_devices/robots/config.py` and update the two instances where the word `logitech` appears to reflect your actual device values for `/dev/video0` and `/dev/video1`.
+
+> **Note:** After updating the config, push the changes to GitHub so the Dockerfile will clone the new config file (disable cache if necessary).
+
+### Run Calibration
+
+To test calibration, run:
+
 python lerobot/scripts/control_robot.py --robot.type=koch --control.type calibrate
 
+If you need to mount files from your host, you can use the following volume mapping:
 
-
-# not needed; but if you wanted to mount files on -v $(pwd)/data/lerobot/:/opt/lerobot/ \
+-v $(pwd)/data/lerobot/:/opt/lerobot/
