@@ -20,7 +20,8 @@ docker pull rocm/pytorch:rocm6.3.3_ubuntu22.04_py3.10_pytorch_release_2.4.0
 docker build -t ryzerdocker .
 
 #run
-docker run -it --rm --shm-size=16G \
+sudo docker run -it --rm --shm-size=16G \
+  --privileged \
   --cap-add=SYS_PTRACE \
   --network=host \
   --ipc=host \
@@ -29,13 +30,19 @@ docker run -it --rm --shm-size=16G \
   --device=/dev/dri \
   --device=/dev/ttyACM_kochleader:/dev/ttyACM_kochleader \
   --device=/dev/ttyACM_kochfollower:/dev/ttyACM_kochfollower \
-  --device=/dev/videoC270_front:/dev/video0 \
-  --device=/dev/videoC270_top:/dev/video1 \
+  --device=/dev/video0:/dev/video0 \
+  --device=/dev/video2:/dev/video2 \
   --security-opt seccomp=unconfined \
   --group-add video \
   --group-add render \
   -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v $(pwd)/data/lerobot/:/opt/lerobot/ \
   ryzerdocker
 
+
+ffplay /dev/video0
+python lerobot/scripts/control_robot.py --robot.type=koch --control.type calibrate
+
+
+
+ -v $(pwd)/data/lerobot/:/opt/lerobot/ \

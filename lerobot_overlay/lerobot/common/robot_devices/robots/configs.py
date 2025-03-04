@@ -259,7 +259,7 @@ class KochRobotConfig(ManipulatorRobotConfig):
                 color_mode = 'rgb'
             ),
             "logitech2": OpenCVCameraConfig(
-                camera_index = "/dev/video1",
+                camera_index = "/dev/video2",
                 fps=10,
                 width= 1280,
                 height = 720,

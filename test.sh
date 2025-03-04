@@ -70,14 +70,16 @@ EOF
 
 echo "running some training tests - first cpu-only, then with iGPU"
 
-#python3 test.py
+python3 test.py
 
 
-#time python /opt/lerobot/lerobot/scripts/train.py --dataset.repo_id=lerobot/pusht --policy.type=diffusion --env.type=pusht --device=cpu --steps=10
+#time python /ryzers/lerobot/lerobot/scripts/train.py --dataset.repo_id=lerobot/pusht --policy.type=diffusion --env.type=pusht --device=cpu --steps=10
 
  
 
-#time python /opt/lerobot/lerobot/scripts/train.py --dataset.repo_id=lerobot/pusht --policy.type=diffusion --env.type=pusht --device=cuda --steps=100
+#time python /ryzers/lerobot/lerobot/scripts/train.py --dataset.repo_id=lerobot/pusht --policy.type=diffusion --env.type=pusht --device=cuda --steps=100
 
 
-time python /opt/lerobot/examples/2_evaluate_pretrained_policy.py
+
+
+#time python /opt/lerobot/examples/2_evaluate_pretrained_policy.py

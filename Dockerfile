@@ -6,9 +6,14 @@ FROM rocm/pytorch:rocm6.3.3_ubuntu22.04_py3.10_pytorch_release_2.4.0
 WORKDIR /ryzers
 
 # lerobot verified against 8861546 (Mar 1, 2025)
-RUN git clone https://github.com/huggingface/lerobot && \  
+RUN git clone https://github.com/abby777777/lerobot && \  
     cd lerobot && sed -i 's/torchvision>=0.21.0/torchvision/g' pyproject.toml && \
-    pip install --no-cache-dir ".[aloha, pusht, dynamixel]"
+    pip install --no-cache-dir ".[pusht, dynamixel]"
+
+RUN apt update && apt install -y ffmpeg
+
+
+#RUN pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.3.3/
 
 # handle add the render group
 RUN groupadd -f render
