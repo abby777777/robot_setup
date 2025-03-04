@@ -58,6 +58,8 @@ sudo docker run -it --rm --shm-size=16G \
 
 To check video streaming, run:
 
+ffplay /dev/video0
+
 ### Update Video Device Configuration
 
 Edit the file `lerobot/lerobot/common/robot_devices/robots/config.py` and update the two instances where the word `logitech` appears to reflect your actual device values for `/dev/video0` and `/dev/video1`.
@@ -73,3 +75,10 @@ python lerobot/scripts/control_robot.py --robot.type=koch --control.type calibra
 If you need to mount files from your host, you can use the following volume mapping:
 
 -v $(pwd)/data/lerobot/:/opt/lerobot/
+
+
+#callibration leader
+{"homing_offset": [0, 3072, -1024, 3072, -3072, -2048], "drive_mode": [0, 1, 0, 1, 0, 0], "start_pos": [1036, 2952, 1122, 3241, 2935, 2022], "end_pos": [1083, -2058, 2057, -2148, 4188, 2688], "calib_mode": ["DEGREE", "DEGREE", "DEGREE", "DEGREE", "DEGREE", "DEGREE"], "motor_names": ["shoulder_pan", "shoulder_lift", "elbow_flex", "wrist_flex", "wrist_roll", "gripper"]}
+
+#callibration follower
+{"homing_offset": [3072, 2048, -1024, 3072, -3072, -2048], "drive_mode": [1, 1, 0, 1, 0, 0], "start_pos": [2019, 1985, 1032, 3125, 3041, 1990], "end_pos": [-2013, -1052, 2057, -2050, 4059, 2958], "calib_mode": ["DEGREE", "DEGREE", "DEGREE", "DEGREE", "DEGREE", "DEGREE"], "motor_names": ["shoulder_pan", "shoulder_lift", "elbow_flex", "wrist_flex", "wrist_roll", "gripper"]}
