@@ -26,7 +26,13 @@ ENV MUJOCO_GL="egl"
 COPY test.sh /ryzers/test.sh
 RUN chmod +x /ryzers/test.sh
 
-CMD ["/bin/bash", "-c", "/ryzers/test.sh && exec /bin/bash"]
+RUN python3 -m pip install --no-cache-dir jupyterlab
+
+# Expose the default JupyterLab port
+EXPOSE 8888
+
+# Set the default command to run JupyterLab
+CMD ["/bin/bash", "-c", "/ryzers/test.sh && jupyter-lab --ip=0.0.0.0 --no-browser --allow-root & exec /bin/bash"]
 
 
 
